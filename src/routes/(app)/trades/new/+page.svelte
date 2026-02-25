@@ -14,7 +14,10 @@
 	let { data, form } = $props();
 	let loading = $state(false);
 
-	let selectedAccount = $state(data.preselectedAccount ?? '');
+	let selectedAccount = $state('');
+	$effect(() => {
+		if (data.preselectedAccount) selectedAccount = data.preselectedAccount;
+	});
 	let selectedAssetType = $state('crypto');
 	let selectedDirection = $state('long');
 	let selectedStrategies = $state<string[]>([]);

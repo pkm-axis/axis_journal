@@ -5,12 +5,16 @@
 	import * as Avatar from '$lib/components/ui/avatar/index.js';
 	import { LogOut, User, Sun, Moon } from 'lucide-svelte';
 
+	import type { Snippet } from 'svelte';
+
 	let {
 		collapsed = false,
-		user
+		user,
+		children
 	}: {
 		collapsed?: boolean;
 		user: { email?: string; user_metadata?: { full_name?: string; avatar_url?: string } } | null;
+		children?: Snippet;
 	} = $props();
 
 	let darkMode = $state(false);
@@ -34,7 +38,7 @@
 	)}
 >
 	<div class="pl-12 lg:pl-0">
-		<slot />
+		{#if children}{@render children()}{/if}
 	</div>
 
 	<div class="flex items-center gap-2">
