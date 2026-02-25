@@ -353,6 +353,12 @@ export interface Database {
 				};
 			};
 		};
+		Views: {
+			[_ in never]: never;
+		};
+		Functions: {
+			[_ in never]: never;
+		};
 		Enums: {
 			account_type: AccountType;
 			asset_type: AssetType;
@@ -360,6 +366,9 @@ export interface Database {
 			trade_status: TradeStatus;
 			challenge_status: ChallengeStatus;
 			media_type: MediaType;
+		};
+		CompositeTypes: {
+			[_ in never]: never;
 		};
 	};
 }
