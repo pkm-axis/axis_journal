@@ -2,6 +2,7 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import * as Avatar from '$lib/components/ui/avatar/index.js';
+	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import { LogOut, User, Sun, Moon } from 'lucide-svelte';
 
 	import type { Snippet } from 'svelte';
@@ -31,6 +32,7 @@
 	class="flex h-16 shrink-0 items-center justify-between border-b px-4"
 >
 	<div class="flex items-center gap-2">
+		<Sidebar.Trigger class="md:hidden" />
 		{#if children}{@render children()}{/if}
 	</div>
 
