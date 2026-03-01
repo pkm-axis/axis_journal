@@ -48,6 +48,26 @@ export const actions: Actions = {
 		return { strategySuccess: true };
 	},
 
+	updateStrategy: async ({ request, locals }) => {
+		const { user } = await locals.safeGetSession();
+		if (!user) return fail(401, { error: 'Not authenticated' });
+
+		const fd = await request.formData();
+		const id = fd.get('id') as string;
+		const name = fd.get('name') as string;
+		const description = fd.get('description') as string;
+
+		if (!name) return fail(400, { error: 'Name is required' });
+
+		const { error } = await locals.supabase
+			.from('strategies')
+			.update({ name, description: description || null })
+			.eq('id', id);
+
+		if (error) return fail(500, { error: error.message });
+		return { strategySuccess: true };
+	},
+
 	deleteStrategy: async ({ request, locals }) => {
 		const fd = await request.formData();
 		const id = fd.get('id') as string;

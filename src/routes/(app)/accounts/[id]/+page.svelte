@@ -45,14 +45,14 @@
 </svelte:head>
 
 <div class="space-y-6">
-	<div class="flex items-center justify-between">
+	<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 		<div class="flex items-center gap-4">
 			<Button variant="ghost" size="icon" href="/accounts">
 				<ArrowLeft class="size-4" />
 			</Button>
 			<div>
 				<div class="flex items-center gap-2">
-					<h1 class="text-3xl font-bold tracking-tight">{data.account.name}</h1>
+					<h1 class="text-2xl font-bold tracking-tight sm:text-3xl">{data.account.name}</h1>
 					<Badge variant={data.account.is_active ? 'default' : 'secondary'}>
 						{data.account.is_active ? 'Active' : 'Inactive'}
 					</Badge>
@@ -186,7 +186,7 @@
 							href="/trades/{trade.id}"
 							class="hover:bg-muted/50 flex items-center justify-between rounded-lg border p-3 transition-colors"
 						>
-							<div class="flex items-center gap-3">
+							<div class="flex flex-wrap items-center gap-2">
 								<Badge variant={trade.direction === 'long' ? 'default' : 'secondary'}>
 									{trade.direction.toUpperCase()}
 								</Badge>

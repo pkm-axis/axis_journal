@@ -22,9 +22,9 @@
 </svelte:head>
 
 <div class="space-y-6">
-	<div class="flex items-center justify-between">
+	<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 		<div>
-			<h1 class="text-3xl font-bold tracking-tight">Mistake Tracking</h1>
+			<h1 class="text-2xl font-bold tracking-tight sm:text-3xl">Mistake Tracking</h1>
 			<p class="text-muted-foreground">Identify and eliminate recurring bad habits.</p>
 		</div>
 		<Button onclick={() => (dialogOpen = true)}>

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { cn } from '$lib/utils.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import * as Avatar from '$lib/components/ui/avatar/index.js';
@@ -8,11 +7,9 @@
 	import type { Snippet } from 'svelte';
 
 	let {
-		collapsed = false,
 		user,
 		children
 	}: {
-		collapsed?: boolean;
 		user: { email?: string; user_metadata?: { full_name?: string; avatar_url?: string } } | null;
 		children?: Snippet;
 	} = $props();
@@ -31,13 +28,9 @@
 </script>
 
 <header
-	class={cn(
-		'bg-background/80 border-border fixed top-0 right-0 z-20 flex h-16 items-center justify-between border-b px-6 backdrop-blur-sm transition-all',
-		collapsed ? 'left-16' : 'left-64',
-		'max-lg:left-0'
-	)}
+	class="flex h-16 shrink-0 items-center justify-between border-b px-4"
 >
-	<div class="pl-12 lg:pl-0">
+	<div class="flex items-center gap-2">
 		{#if children}{@render children()}{/if}
 	</div>
 
@@ -66,14 +59,14 @@
 					{user?.user_metadata?.full_name ?? user?.email ?? 'User'}
 				</DropdownMenu.Label>
 				<DropdownMenu.Separator />
-			<DropdownMenu.Item
-				onSelect={() => {
-					window.location.href = '/settings';
-				}}
-			>
-				<User class="mr-2 size-4" />
-				Settings
-			</DropdownMenu.Item>
+				<DropdownMenu.Item
+					onSelect={() => {
+						window.location.href = '/settings';
+					}}
+				>
+					<User class="mr-2 size-4" />
+					Settings
+				</DropdownMenu.Item>
 				<DropdownMenu.Separator />
 				<form method="POST" action="/logout">
 					<DropdownMenu.Item

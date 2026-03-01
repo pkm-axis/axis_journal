@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { onMount } from 'svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
@@ -11,20 +12,30 @@
 	import { Badge } from '$lib/components/ui/badge/index.js';
 	import { ArrowLeft } from 'lucide-svelte';
 
+	const STORAGE_KEY = 'axis-trade-draft';
+
 	let { data, form } = $props();
 	let loading = $state(false);
+	let hydrated = $state(false);
 
 	let selectedAccount = $state('');
-	$effect(() => {
-		if (data.preselectedAccount) selectedAccount = data.preselectedAccount;
-	});
+	let asset = $state('');
 	let selectedAssetType = $state('crypto');
 	let selectedDirection = $state('long');
+	let entryPrice = $state('');
+	let exitPrice = $state('');
+	let positionSize = $state('');
+	let stopLoss = $state('');
+	let takeProfit = $state('');
+	let fees = $state('0');
+	let openedAt = $state('');
+	let psychNotes = $state('');
+	let selectedEmotion = $state('');
+	let confidenceScore = $state(3);
+	let followedPlan = $state(false);
 	let selectedStrategies = $state<string[]>([]);
 	let selectedTags = $state<string[]>([]);
 	let selectedMistakes = $state<string[]>([]);
-	let confidenceScore = $state(3);
-	let followedPlan = $state(false);
 
 	const assetTypes = [
 		{ value: 'stocks', label: 'Stocks' },
@@ -47,11 +58,78 @@
 		'Neutral'
 	];
 
-	let selectedEmotion = $state('');
-
 	function toggleArrayItem(arr: string[], item: string): string[] {
 		return arr.includes(item) ? arr.filter((i) => i !== item) : [...arr, item];
 	}
+
+	function getDraft() {
+		return {
+			selectedAccount,
+			asset,
+			selectedAssetType,
+			selectedDirection,
+			entryPrice,
+			exitPrice,
+			positionSize,
+			stopLoss,
+			takeProfit,
+			fees,
+			openedAt,
+			psychNotes,
+			selectedEmotion,
+			confidenceScore,
+			followedPlan,
+			selectedStrategies,
+			selectedTags,
+			selectedMistakes
+		};
+	}
+
+	function loadDraft() {
+		try {
+			const raw = localStorage.getItem(STORAGE_KEY);
+			if (!raw) return;
+			const draft = JSON.parse(raw);
+			selectedAccount = draft.selectedAccount ?? '';
+			asset = draft.asset ?? '';
+			selectedAssetType = draft.selectedAssetType ?? 'crypto';
+			selectedDirection = draft.selectedDirection ?? 'long';
+			entryPrice = draft.entryPrice ?? '';
+			exitPrice = draft.exitPrice ?? '';
+			positionSize = draft.positionSize ?? '';
+			stopLoss = draft.stopLoss ?? '';
+			takeProfit = draft.takeProfit ?? '';
+			fees = draft.fees ?? '0';
+			openedAt = draft.openedAt ?? '';
+			psychNotes = draft.psychNotes ?? '';
+			selectedEmotion = draft.selectedEmotion ?? '';
+			confidenceScore = draft.confidenceScore ?? 3;
+			followedPlan = draft.followedPlan ?? false;
+			selectedStrategies = draft.selectedStrategies ?? [];
+			selectedTags = draft.selectedTags ?? [];
+			selectedMistakes = draft.selectedMistakes ?? [];
+		} catch {
+			// ignore corrupt data
+		}
+	}
+
+	function clearDraft() {
+		localStorage.removeItem(STORAGE_KEY);
+	}
+
+	onMount(() => {
+		loadDraft();
+		if (data.preselectedAccount && !selectedAccount) {
+			selectedAccount = data.preselectedAccount;
+		}
+		hydrated = true;
+	});
+
+	$effect(() => {
+		if (!hydrated) return;
+		const draft = getDraft();
+		localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
+	});
 </script>
 
 <svelte:head>
@@ -64,7 +142,7 @@
 			<ArrowLeft class="size-4" />
 		</Button>
 		<div>
-			<h1 class="text-3xl font-bold tracking-tight">Log Trade</h1>
+			<h1 class="text-2xl font-bold tracking-tight sm:text-3xl">Log Trade</h1>
 			<p class="text-muted-foreground">Record a new trade with full details.</p>
 		</div>
 	</div>
@@ -77,8 +155,11 @@
 		method="POST"
 		use:enhance={() => {
 			loading = true;
-			return async ({ update }) => {
+			return async ({ result, update }) => {
 				loading = false;
+				if (result.type === 'redirect') {
+					clearDraft();
+				}
 				await update();
 			};
 		}}
@@ -114,7 +195,7 @@
 
 							<div class="space-y-2">
 								<Label for="asset">Asset *</Label>
-								<Input id="asset" name="asset" placeholder="BTC/USD, AAPL, EUR/USD" required />
+								<Input id="asset" name="asset" placeholder="BTC/USD, AAPL, EUR/USD" required bind:value={asset} />
 							</div>
 						</div>
 
@@ -170,6 +251,7 @@
 									step="any"
 									placeholder="0.00"
 									required
+									bind:value={entryPrice}
 								/>
 							</div>
 							<div class="space-y-2">
@@ -180,6 +262,7 @@
 									type="number"
 									step="any"
 									placeholder="Leave blank if open"
+									bind:value={exitPrice}
 								/>
 							</div>
 							<div class="space-y-2">
@@ -191,6 +274,7 @@
 									step="any"
 									placeholder="0.00"
 									required
+									bind:value={positionSize}
 								/>
 							</div>
 						</div>
@@ -205,6 +289,7 @@
 									type="number"
 									step="any"
 									placeholder="0.00"
+									bind:value={stopLoss}
 								/>
 							</div>
 							<div class="space-y-2">
@@ -215,6 +300,7 @@
 									type="number"
 									step="any"
 									placeholder="0.00"
+									bind:value={takeProfit}
 								/>
 							</div>
 							<div class="space-y-2">
@@ -225,7 +311,7 @@
 									type="number"
 									step="0.01"
 									placeholder="0.00"
-									value="0"
+									bind:value={fees}
 								/>
 							</div>
 						</div>
@@ -233,7 +319,7 @@
 						<!-- Time -->
 						<div class="space-y-2">
 							<Label for="opened_at">Opened At</Label>
-							<Input id="opened_at" name="opened_at" type="datetime-local" />
+							<Input id="opened_at" name="opened_at" type="datetime-local" bind:value={openedAt} />
 						</div>
 					</Card.Content>
 				</Card.Root>
@@ -254,6 +340,7 @@
 								name="psych_notes"
 								placeholder="Describe your reasoning, setup, and conviction..."
 								rows={4}
+								bind:value={psychNotes}
 							/>
 						</div>
 

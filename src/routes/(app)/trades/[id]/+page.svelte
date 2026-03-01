@@ -59,14 +59,14 @@
 
 <div class="mx-auto max-w-4xl space-y-6">
 	<!-- Header -->
-	<div class="flex items-center justify-between">
+	<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 		<div class="flex items-center gap-4">
 			<Button variant="ghost" size="icon" href="/trades">
 				<ArrowLeft class="size-4" />
 			</Button>
 			<div>
 				<div class="flex items-center gap-2">
-					<h1 class="text-3xl font-bold tracking-tight">{data.trade.asset}</h1>
+					<h1 class="text-2xl font-bold tracking-tight sm:text-3xl">{data.trade.asset}</h1>
 					<Badge variant={data.trade.direction === 'long' ? 'default' : 'secondary'}>
 						{data.trade.direction.toUpperCase()}
 					</Badge>
@@ -114,7 +114,7 @@
 					<div>
 						<p class="text-sm font-medium text-muted-foreground">Profit / Loss</p>
 						<p
-							class="text-3xl font-bold {data.trade.pnl >= 0
+							class="text-2xl font-bold sm:text-3xl {data.trade.pnl >= 0
 								? 'text-green-600 dark:text-green-400'
 								: 'text-red-600 dark:text-red-400'}"
 						>
@@ -259,7 +259,7 @@
 
 	<!-- Strategies, Tags, Mistakes -->
 	{#if data.strategies.length > 0 || data.tags.length > 0 || data.mistakes.length > 0}
-		<div class="grid gap-4 sm:grid-cols-3">
+		<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 			{#if data.strategies.length > 0}
 				<Card.Root>
 					<Card.Header class="pb-2">

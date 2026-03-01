@@ -57,9 +57,9 @@
 </svelte:head>
 
 <div class="space-y-6">
-	<div class="flex items-center justify-between">
+	<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 		<div>
-			<h1 class="text-3xl font-bold tracking-tight">Trades</h1>
+			<h1 class="text-2xl font-bold tracking-tight sm:text-3xl">Trades</h1>
 			<p class="text-muted-foreground">View and manage all your trades.</p>
 		</div>
 		<Button href="/trades/new">
@@ -78,7 +78,7 @@
 				value={data.filters.accountId ?? undefined}
 				onValueChange={(v) => applyFilter('account', v)}
 			>
-				<Select.Trigger class="w-[180px]">
+				<Select.Trigger class="w-full sm:w-[180px]">
 					{data.accounts.find((a) => a.id === data.filters.accountId)?.name ?? 'All Accounts'}
 				</Select.Trigger>
 				<Select.Content>
@@ -93,7 +93,7 @@
 				value={data.filters.assetType ?? undefined}
 				onValueChange={(v) => applyFilter('asset_type', v)}
 			>
-				<Select.Trigger class="w-[160px]">
+				<Select.Trigger class="w-full sm:w-[160px]">
 					{assetTypes.find((a) => a.value === data.filters.assetType)?.label ?? 'All Assets'}
 				</Select.Trigger>
 				<Select.Content>
@@ -108,7 +108,7 @@
 				value={data.filters.status ?? undefined}
 				onValueChange={(v) => applyFilter('status', v)}
 			>
-				<Select.Trigger class="w-[140px]">
+				<Select.Trigger class="w-full sm:w-[140px]">
 					{data.filters.status === 'open'
 						? 'Open'
 						: data.filters.status === 'closed'

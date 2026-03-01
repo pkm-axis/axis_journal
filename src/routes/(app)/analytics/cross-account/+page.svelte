@@ -48,7 +48,7 @@
 			<ArrowLeft class="size-4" />
 		</Button>
 		<div>
-			<h1 class="flex items-center gap-2 text-3xl font-bold tracking-tight">
+			<h1 class="flex items-center gap-2 text-2xl font-bold tracking-tight sm:text-3xl">
 				<GitCompareArrows class="size-7" />
 				Cross-Account Insights
 			</h1>
@@ -154,7 +154,7 @@
 
 		<!-- By Account Type Comparison -->
 		{#if Object.keys(data.byType).length > 1}
-			<div class="grid gap-4 sm:grid-cols-{Math.min(Object.keys(data.byType).length, 3)}">
+			<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 				{#each Object.entries(data.byType) as [type, accts]}
 					{@const totalTrades = accts.reduce((s, a) => s + a.totalTrades, 0)}
 					{@const avgWinRate =

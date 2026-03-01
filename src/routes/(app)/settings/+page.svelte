@@ -16,7 +16,7 @@
 
 <div class="mx-auto max-w-2xl space-y-6">
 	<div>
-		<h1 class="text-3xl font-bold tracking-tight">Settings</h1>
+		<h1 class="text-2xl font-bold tracking-tight sm:text-3xl">Settings</h1>
 		<p class="text-muted-foreground">Manage your account preferences.</p>
 	</div>
 

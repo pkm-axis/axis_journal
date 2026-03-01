@@ -39,7 +39,7 @@
 			<ArrowLeft class="size-4" />
 		</Button>
 		<div>
-			<h1 class="text-3xl font-bold tracking-tight">Edit Trade</h1>
+			<h1 class="text-2xl font-bold tracking-tight sm:text-3xl">Edit Trade</h1>
 			<p class="text-muted-foreground">{data.trade.asset} {data.trade.direction.toUpperCase()}</p>
 		</div>
 	</div>

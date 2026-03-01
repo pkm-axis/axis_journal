@@ -3,16 +3,29 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
-	import { Textarea } from '$lib/components/ui/textarea/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { Badge } from '$lib/components/ui/badge/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { Separator } from '$lib/components/ui/separator/index.js';
-	import { Plus, Trash2, LineChart, Tags } from 'lucide-svelte';
+	import { Plus, Trash2, Pencil, LineChart, Tags } from 'lucide-svelte';
+	import RichTextEditor from '$lib/components/rich-text-editor.svelte';
 
 	let { data, form } = $props();
 	let strategyDialogOpen = $state(false);
+	let editStrategyDialogOpen = $state(false);
 	let tagDialogOpen = $state(false);
+
+	let newStrategyDescription = $state('');
+	let editingStrategy = $state<{ id: string; name: string; description: string | null } | null>(
+		null
+	);
+	let editDescription = $state('');
+
+	function openEditDialog(strategy: { id: string; name: string; description: string | null }) {
+		editingStrategy = strategy;
+		editDescription = strategy.description ?? '';
+		editStrategyDialogOpen = true;
+	}
 </script>
 
 <svelte:head>
@@ -21,7 +34,7 @@
 
 <div class="space-y-8">
 	<div>
-		<h1 class="text-3xl font-bold tracking-tight">Strategies & Tags</h1>
+		<h1 class="text-2xl font-bold tracking-tight sm:text-3xl">Strategies & Tags</h1>
 		<p class="text-muted-foreground">Organize and categorize your trades.</p>
 	</div>
 
@@ -52,31 +65,40 @@
 				</Card.Content>
 			</Card.Root>
 		{:else}
-			<div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-				{#each data.strategies as strategy}
-					<Card.Root>
-						<Card.Header class="flex flex-row items-start justify-between space-y-0 pb-2">
-							<div>
-								<Card.Title class="text-base">{strategy.name}</Card.Title>
-								{#if strategy.description}
-									<Card.Description class="mt-1">{strategy.description}</Card.Description>
-								{/if}
-							</div>
+		<div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+			{#each data.strategies as strategy}
+				<Card.Root>
+					<Card.Header class="flex flex-row items-start justify-between space-y-0">
+						<Card.Title class="text-base">{strategy.name}</Card.Title>
+						<div class="flex items-center gap-0.5">
+							<Button
+								variant="ghost"
+								size="icon-sm"
+								onclick={() => openEditDialog(strategy)}
+							>
+								<Pencil class="size-4 text-muted-foreground hover:text-foreground" />
+							</Button>
 							<form method="POST" action="?/deleteStrategy" use:enhance>
 								<input type="hidden" name="id" value={strategy.id} />
 								<Button variant="ghost" size="icon-sm" type="submit">
 									<Trash2 class="size-4 text-muted-foreground hover:text-destructive" />
 								</Button>
 							</form>
-						</Card.Header>
-						<Card.Content>
-							<Badge variant="secondary">
-								{data.strategyCounts[strategy.id] ?? 0} trades
-							</Badge>
-						</Card.Content>
-					</Card.Root>
-				{/each}
-			</div>
+						</div>
+					</Card.Header>
+				<Card.Content class="space-y-3">
+					{#if strategy.description}
+						<div class="prose prose-sm max-w-none text-muted-foreground [&_ul]:my-0 [&_ol]:my-0 [&_li]:my-0 [&_p]:my-0 [&_h2]:mt-0 [&_h2]:mb-1 [&_h3]:mt-0 [&_h3]:mb-1">
+							{@html strategy.description}
+						</div>
+					{/if}
+						<Badge variant="secondary">
+							{data.strategyCounts[strategy.id] ?? 0} trades
+						</Badge>
+					</Card.Content>
+				</Card.Root>
+			{/each}
+		</div>
 		{/if}
 	</section>
 
@@ -126,7 +148,7 @@
 
 <!-- Add Strategy Dialog -->
 <Dialog.Root bind:open={strategyDialogOpen}>
-	<Dialog.Content>
+	<Dialog.Content class="sm:max-w-lg">
 		<Dialog.Header>
 			<Dialog.Title>New Strategy</Dialog.Title>
 			<Dialog.Description>Define a trading strategy to categorize your trades.</Dialog.Description>
@@ -137,6 +159,7 @@
 			use:enhance={() => {
 				return async ({ update }) => {
 					strategyDialogOpen = false;
+					newStrategyDescription = '';
 					await update();
 				};
 			}}
@@ -144,11 +167,20 @@
 		>
 			<div class="space-y-2">
 				<Label for="strategy-name">Name</Label>
-				<Input id="strategy-name" name="name" placeholder="e.g. Breakout, Scalping, Mean Reversion" required />
+				<Input
+					id="strategy-name"
+					name="name"
+					placeholder="e.g. Breakout, Scalping, Mean Reversion"
+					required
+				/>
 			</div>
 			<div class="space-y-2">
-				<Label for="strategy-desc">Description</Label>
-				<Textarea id="strategy-desc" name="description" placeholder="Describe this strategy..." rows={3} />
+				<Label>Description</Label>
+				<input type="hidden" name="description" value={newStrategyDescription} />
+				<RichTextEditor
+					placeholder="Describe this strategy..."
+					onchange={(html) => (newStrategyDescription = html)}
+				/>
 			</div>
 			<Dialog.Footer>
 				<Button variant="outline" type="button" onclick={() => (strategyDialogOpen = false)}>
@@ -157,6 +189,60 @@
 				<Button type="submit">Create Strategy</Button>
 			</Dialog.Footer>
 		</form>
+	</Dialog.Content>
+</Dialog.Root>
+
+<!-- Edit Strategy Dialog -->
+<Dialog.Root bind:open={editStrategyDialogOpen}>
+	<Dialog.Content class="sm:max-w-lg">
+		<Dialog.Header>
+			<Dialog.Title>Edit Strategy</Dialog.Title>
+			<Dialog.Description>Update strategy details and description.</Dialog.Description>
+		</Dialog.Header>
+		{#if editingStrategy}
+			<form
+				method="POST"
+				action="?/updateStrategy"
+				use:enhance={() => {
+					return async ({ update }) => {
+						editStrategyDialogOpen = false;
+						editingStrategy = null;
+						await update();
+					};
+				}}
+				class="space-y-4"
+			>
+				<input type="hidden" name="id" value={editingStrategy.id} />
+				<div class="space-y-2">
+					<Label for="edit-strategy-name">Name</Label>
+					<Input
+						id="edit-strategy-name"
+						name="name"
+						value={editingStrategy.name}
+						required
+					/>
+				</div>
+				<div class="space-y-2">
+					<Label>Description</Label>
+					<input type="hidden" name="description" value={editDescription} />
+					<RichTextEditor
+						content={editingStrategy.description ?? ''}
+						placeholder="Describe this strategy..."
+						onchange={(html) => (editDescription = html)}
+					/>
+				</div>
+				<Dialog.Footer>
+					<Button
+						variant="outline"
+						type="button"
+						onclick={() => (editStrategyDialogOpen = false)}
+					>
+						Cancel
+					</Button>
+					<Button type="submit">Save Changes</Button>
+				</Dialog.Footer>
+			</form>
+		{/if}
 	</Dialog.Content>
 </Dialog.Root>
 

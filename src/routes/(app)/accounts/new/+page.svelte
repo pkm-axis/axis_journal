@@ -22,7 +22,7 @@
 			<ArrowLeft class="size-4" />
 		</Button>
 		<div>
-			<h1 class="text-3xl font-bold tracking-tight">New Account</h1>
+			<h1 class="text-2xl font-bold tracking-tight sm:text-3xl">New Account</h1>
 			<p class="text-muted-foreground">Add a trading account to track performance.</p>
 		</div>
 	</div>
@@ -73,7 +73,7 @@
 					<Input id="platform" name="platform" placeholder="e.g. Binance, MetaTrader, TradingView" />
 				</div>
 
-				<div class="grid grid-cols-2 gap-4">
+				<div class="grid gap-4 sm:grid-cols-2">
 					<div class="space-y-2">
 						<Label for="initial_balance">Initial Balance</Label>
 						<Input

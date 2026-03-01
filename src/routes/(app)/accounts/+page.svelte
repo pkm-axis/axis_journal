@@ -43,9 +43,9 @@
 </svelte:head>
 
 <div class="space-y-6">
-	<div class="flex items-center justify-between">
+	<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 		<div>
-			<h1 class="text-3xl font-bold tracking-tight">Accounts</h1>
+			<h1 class="text-2xl font-bold tracking-tight sm:text-3xl">Accounts</h1>
 			<p class="text-muted-foreground">Manage your trading accounts across platforms.</p>
 		</div>
 		<Button href="/accounts/new">

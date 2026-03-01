@@ -42,11 +42,23 @@
 		"@supabase/ssr": "^0.8.0",
 		"@supabase/supabase-js": "^2.97.0",
 		"@sveltejs/adapter-vercel": "^6.3.3",
+		"@tiptap/core": "^3.20.0",
+		"@tiptap/extension-blockquote": "^3.20.0",
+		"@tiptap/extension-code": "^3.20.0",
+		"@tiptap/extension-code-block": "^3.20.0",
+		"@tiptap/extension-highlight": "^3.20.0",
+		"@tiptap/extension-link": "^3.20.0",
+		"@tiptap/extension-placeholder": "^3.20.0",
+		"@tiptap/extension-text-align": "^3.20.0",
+		"@tiptap/extension-underline": "^3.20.0",
+		"@tiptap/pm": "^3.20.0",
+		"@tiptap/starter-kit": "^3.20.0",
 		"bits-ui": "^2.16.2",
 		"chart.js": "^4.5.1",
 		"clsx": "^2.1.1",
 		"lucide-svelte": "^0.575.0",
 		"tailwind-merge": "^3.5.0",
-		"tailwind-variants": "^3.2.2"
+		"tailwind-variants": "^3.2.2",
+		"tailwindcss-animate": "^1.0.7"
 	}
 }

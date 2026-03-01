@@ -50,9 +50,9 @@
 </svelte:head>
 
 <div class="space-y-6">
-	<div class="flex items-center justify-between">
+	<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 		<div>
-			<h1 class="text-3xl font-bold tracking-tight">Dashboard</h1>
+			<h1 class="text-2xl font-bold tracking-tight sm:text-3xl">Dashboard</h1>
 			<p class="text-muted-foreground">Your trading performance at a glance.</p>
 		</div>
 		<Button href="/trades/new">
@@ -150,7 +150,7 @@
 				{#if data.dailyPerf.length > 0}
 					<LineChart labels={dailyChartData.labels} datasets={dailyChartData.datasets} />
 				{:else}
-					<div class="flex h-[300px] items-center justify-center">
+					<div class="flex h-[200px] items-center justify-center sm:h-[300px]">
 						<p class="text-muted-foreground text-sm">No daily performance data yet.</p>
 					</div>
 				{/if}

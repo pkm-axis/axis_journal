@@ -95,9 +95,9 @@
 </svelte:head>
 
 <div class="space-y-6">
-	<div class="flex items-center justify-between">
+	<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 		<div>
-			<h1 class="text-3xl font-bold tracking-tight">Analytics</h1>
+			<h1 class="text-2xl font-bold tracking-tight sm:text-3xl">Analytics</h1>
 			<p class="text-muted-foreground">Deep dive into your trading performance.</p>
 		</div>
 		<Button variant="outline" href="/analytics/cross-account">
@@ -115,7 +115,7 @@
 				value={data.filters.accountId ?? undefined}
 				onValueChange={(v) => applyFilter('account', v)}
 			>
-				<Select.Trigger class="w-[180px]">
+				<Select.Trigger class="w-full sm:w-[180px]">
 					{data.accounts.find((a) => a.id === data.filters.accountId)?.name ?? 'All Accounts'}
 				</Select.Trigger>
 				<Select.Content>
@@ -130,7 +130,7 @@
 				value={data.filters.assetType ?? undefined}
 				onValueChange={(v) => applyFilter('asset_type', v)}
 			>
-				<Select.Trigger class="w-[160px]">
+				<Select.Trigger class="w-full sm:w-[160px]">
 					{assetTypes.find((a) => a.value === data.filters.assetType)?.label ?? 'All Assets'}
 				</Select.Trigger>
 				<Select.Content>
@@ -145,7 +145,7 @@
 				value={data.filters.strategyId ?? undefined}
 				onValueChange={(v) => applyFilter('strategy', v)}
 			>
-				<Select.Trigger class="w-[160px]">
+				<Select.Trigger class="w-full sm:w-[160px]">
 					{data.strategies.find((s) => s.id === data.filters.strategyId)?.name ??
 						'All Strategies'}
 				</Select.Trigger>
@@ -156,19 +156,19 @@
 				</Select.Content>
 			</Select.Root>
 
-			<div class="flex items-center gap-2">
+			<div class="flex flex-col gap-2 sm:flex-row sm:items-center">
 				<Input
 					type="date"
 					value={data.filters.dateFrom ?? ''}
 					onchange={(e) => applyFilter('from', (e.target as HTMLInputElement).value || undefined)}
-					class="w-[150px]"
+					class="w-full sm:w-[150px]"
 				/>
 				<span class="text-muted-foreground text-sm">to</span>
 				<Input
 					type="date"
 					value={data.filters.dateTo ?? ''}
 					onchange={(e) => applyFilter('to', (e.target as HTMLInputElement).value || undefined)}
-					class="w-[150px]"
+					class="w-full sm:w-[150px]"
 				/>
 			</div>
 

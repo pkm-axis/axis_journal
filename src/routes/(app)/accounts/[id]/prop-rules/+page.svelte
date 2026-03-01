@@ -62,7 +62,7 @@
 		<div>
 			<div class="flex items-center gap-2">
 				<Shield class="size-5" />
-				<h1 class="text-3xl font-bold tracking-tight">Prop Firm Rules</h1>
+				<h1 class="text-2xl font-bold tracking-tight sm:text-3xl">Prop Firm Rules</h1>
 			</div>
 			<p class="text-muted-foreground">{data.account.name}</p>
 		</div>
@@ -152,7 +152,7 @@
 	{/if}
 
 	<!-- Today's Metrics -->
-	<div class="grid gap-4 sm:grid-cols-4">
+	<div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
 		<Card.Root>
 			<Card.Header class="pb-2">
 				<Card.Title class="text-xs font-medium text-muted-foreground">Today's P&L</Card.Title>
@@ -314,7 +314,7 @@
 					<Label>Challenge Status</Label>
 					<input type="hidden" name="status" value={selectedStatus} />
 					<Select.Root type="single" bind:value={selectedStatus}>
-						<Select.Trigger class="w-[200px]">
+						<Select.Trigger class="w-full sm:w-[200px]">
 							{selectedStatus === 'active'
 								? 'Active'
 								: selectedStatus === 'passed'
